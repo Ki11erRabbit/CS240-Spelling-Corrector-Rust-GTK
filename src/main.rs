@@ -1,27 +1,25 @@
 mod spell_corrector;
 use glib::clone;
 use gtk::prelude::*;
-use gtk::{gdk,gio,glib};
+use gtk::{gdk,glib};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 fn main() {
-    let application = gtk::Application::new(Some("com.gtk-rs.spelling_corrector"), Default::default());
+    let application = adw::Application::new(Some("com.gtk-rs.spelling_corrector"), Default::default());
 
     application.connect_activate(build_ui);
     application.run();
 }
 
-fn build_ui(app: &gtk::Application) {
+fn build_ui(app: &adw::Application) {
     let window = gtk::ApplicationWindow::builder()
         .application(app)
         .title("Spelling Corrector")
         .default_width(660)
         .default_height(420)
         .build();
-
-    let display = gdk::Display::default().unwrap();
-    
+ 
     let container = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
         .margin_top(24)
@@ -59,7 +57,7 @@ fn build_ui(app: &gtk::Application) {
     text_container.append(&go_btn);
     text_container.append(&output);
 
-    let mut corrector = Rc::new(RefCell::new(spell_corrector::SpellCorrector::new()));
+    let corrector = Rc::new(RefCell::new(spell_corrector::SpellCorrector::new()));
 
 
     corrector.borrow_mut().use_dictionary("notsobig.txt".to_string());
